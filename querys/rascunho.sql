@@ -5,7 +5,7 @@ FROM	projeto
 	JOIN departamento	ON departamento.dnumero = dnum
         JOIN empregado 		ON dno = dnumero
 WHERE	empregado.dno = departamento.dnumero
-		AND projeto.dnum = departamento.dnumero
+	AND projeto.dnum = departamento.dnumero
 GROUP	BY	pnome
 ORDER	BY	pnome;
 
