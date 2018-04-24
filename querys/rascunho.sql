@@ -1,8 +1,8 @@
 USE empresa;
 SELECT	pnome
 FROM	projeto
-		JOIN trabalha_em 	ON pno = pnumero
-		JOIN departamento	ON departamento.dnumero = dnum
+	JOIN trabalha_em 	ON pno = pnumero
+	JOIN departamento	ON departamento.dnumero = dnum
         JOIN empregado 		ON dno = dnumero
 WHERE	empregado.dno = departamento.dnumero
 		AND projeto.dnum = departamento.dnumero
@@ -14,7 +14,7 @@ FROM	departamento;
 
 SELECT	pnome
 FROM	trabalha_em
-		JOIN empregado		ON essn = empregado.ssn
+	JOIN empregado		ON essn = empregado.ssn
         JOIN departamento	ON empregado.dno = departamento.dnumero
         JOIN projeto		ON pno = projeto.pnumero
 GROUP	BY	pnome
