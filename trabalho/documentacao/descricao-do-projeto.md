@@ -1,7 +1,8 @@
 # Banco de Dados, Ciência da Computação - 2018.1, INF/UFG
 ## Atividade Avaliativa da Disciplina - Projeto BD para o Hospital X
 ### Integrantes do Grupo:
-- *inserir os nomes dos integrantes aqui*  
+- [Erick Vieira](github.com/erickvieira)  
+- [Matheus Henrique](github.com/Matheushbp)  
 
 ### Descrição do Problema:
   Este projeto se dedica a modelar a estrutura de um Banco de Dados que visa atender à demanda de Hospitais e Clínicas que fazem uso do modelo de negócio voltado para **plantões** e **consultas casuais**. Portanto, esse BD não se compromete a cubrir outros pontos da gestão e do dia-a-dia de um hospital que não se encaixe nesse cenário; Mais especificamente, que não esteja relacionado às consultas do plantão ou às internações.
@@ -64,14 +65,14 @@ INTERNACAO ( __<ins>cpf_pct, num_sala</ins>__, dt_intetn, dt_alta, motivo )
 INTERNACAO ( cpf_pct ) __REFERENCIA__ PACIENTE ( cpf )  
 INTERNACAO ( num_sala ) __REFERENCIA__ SALA ( numero )  
 
-FICHA_PCT ( __<ins>cpf_enf, cpf_pct, dt_triagem</ins>__, obs, peso_pct, altura_pct )  
+FICHA_PCT ( __<ins>cpf_pct, dt_triagem</ins>__, obs, peso_pct, altura_pct, cpf_enf )  
 FICHA_PCT ( cpf_enf ) __REFERENCIA__ ENFERMEIRO ( cpf )  
 FICHA_PCT ( cpf_pct ) __REFERENCIA__ PACIENTE ( cpf )  
 
 SINTOMA ( __<ins>cod</ins>__, descricao, gravidade )  
 
-SINTOMA_PCT ( __<ins>sintoma, cpf_enf, cpf_pct, dt_triagem</ins>__ )  
-SINTOMA_PCT ( cpf_pct, cpf_enf, dt_triagem ) __REFERENCIA__ FICHA_PCT ( cpf_pct, cpf_enf, dt_triagem )  
+SINTOMA_PCT ( __<ins>sintoma, cpf_pct, dt_triagem</ins>__ )  
+SINTOMA_PCT ( cpf_pct, dt_triagem ) __REFERENCIA__ FICHA_PCT ( cpf_pct, dt_triagem )  
 SINTOMA_PCT ( sintoma ) __REFERENCIA__ SINTOMA ( cod )  
 
 MEDICAMENTO ( __<ins>cod</ins>__, descricao, preco_unit, generico )  
@@ -90,13 +91,13 @@ FORMADO_EM ( __<ins>cpf, id_area</ins>__ )
 FORMADO_EM ( cpf ) __REFERENCIA__ MEDICO ( cpf )  
 FORMADO_EM ( id_area ) __REFERENCIA__ AREA_ATUACAO ( id_area )  
 
-CONSULTA ( __<ins>cpf_med, cpf_pct, dt_atend</ins>__, dt_atend_orig, cpf_enf, dt_triagem )  
+CONSULTA ( __<ins>cpf_med, cpf_pct, dt_atend</ins>__, dt_atend_orig, dt_triagem )  
 CONSULTA ( cpf_med ) __REFERENCIA__ MEDICO ( cpf )  
 CONSULTA ( cpf_pct ) __REFERENCIA__ PACIENTE ( cpf )  
-CONSULTA ( cpf_pct, cpf_enf, dt_triagem ) __REFERENCIA__ FICHA_PCT ( cpf_pct, cpf_enf, dt_triagem )  
+CONSULTA ( cpf_pct, dt_triagem ) __REFERENCIA__ FICHA_PCT ( cpf_pct, dt_triagem )  
 
 ENCAMINHAMENTO ( __<ins>cod</ins>__, motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend )  
-ENCAMINHAMENTO ( cpf_pct, cpf_enf, dt_atend ) __REFERENCIA__ CONSULTA ( cpf_pct, cpf_enf, dt_atend )  
+ENCAMINHAMENTO ( cpf_pct, dt_atend ) __REFERENCIA__ CONSULTA ( cpf_pct, dt_atend )  
 
 RECEITA ( __<ins>cod_medicamento, cpf_med, cpf_pct, dt_atend</ins>__, dt_vencimento, obs )  
 RECEITA ( cod_medicamento ) __REFERENCIA__ MEDICAMENTO ( cod )  
