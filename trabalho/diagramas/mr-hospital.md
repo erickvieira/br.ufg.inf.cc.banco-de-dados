@@ -47,7 +47,7 @@ MEDICO ( cpf ) __REFERENCIA__ FUNCIONARIO ( cpf )
 AREA_ATUACAO ( __<ins>id_area</ins>__, id_macro_area, descricao )  
 AREA_ATUACAO ( id_macro_area ) __REFERENCIA__ AREA_ATUACAO ( id_area )  
 
-FORMADO_EM ( __<ins>cpf, id_area</ins>__ )  
+FORMADO_EM ( __<ins>id_area</ins>__, cpf )  
 FORMADO_EM ( cpf ) __REFERENCIA__ MEDICO ( cpf )  
 FORMADO_EM ( id_area ) __REFERENCIA__ AREA_ATUACAO ( id_area )  
 
@@ -57,7 +57,7 @@ CONSULTA ( cpf_pct ) __REFERENCIA__ PACIENTE ( cpf )
 CONSULTA ( cpf_pct, dt_triagem ) __REFERENCIA__ FICHA_PCT ( cpf_pct, dt_triagem )  
 
 ENCAMINHAMENTO ( __<ins>cod</ins>__, motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend )  
-ENCAMINHAMENTO ( cpf_pct, dt_atend ) __REFERENCIA__ CONSULTA ( cpf_pct, dt_atend )  
+ENCAMINHAMENTO ( cpf_pct, cpf_med, dt_atend ) __REFERENCIA__ CONSULTA ( cpf_pct, cpf_med, dt_atend )  
 
 RECEITA ( __<ins>cod_medicamento, cpf_med, cpf_pct, dt_atend</ins>__, dt_vencimento, obs )  
 RECEITA ( cod_medicamento ) __REFERENCIA__ MEDICAMENTO ( cod )  
