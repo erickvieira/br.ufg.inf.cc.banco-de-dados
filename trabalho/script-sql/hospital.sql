@@ -6,64 +6,39 @@ CREATE TABLE PESSOA (
     cpf             VARCHAR(11) NOT NULL,
     end_fisico      VARCHAR(50) NOT NULL,
     fone_contato    VARCHAR(12) NOT NULL,
-    dt_nasc         DATETIME NOT NULL,
+    dt_nasc         DATE NOT NULL,
     nome            VARCHAR(50) NOT NULL,
+    sexo            ENUM( 'm', 'f' ),
 
     PRIMARY KEY (cpf)
 );
 
 CREATE TABLE PACIENTE (
-    cpf             VARCHAR(11) NOT NULL,
-    end_fisico      VARCHAR(50) NOT NULL,
-    fone_contato    VARCHAR(12) NOT NULL,
-    dt_nasc         DATETIME NOT NULL,
-    nome            VARCHAR(50) NOT NULL,
+    cpf                 VARCHAR(11) NOT NULL,
     cpf_acompanhante    VARCHAR(11),
     gestante            BOOLEAN NOT NULL,
 
+    FOREIGN KEY (cpf) REFERENCES PESSOA(cpf),
     PRIMARY KEY (cpf),
     FOREIGN KEY (cpf_acompanhante) REFERENCES PESSOA(cpf)
 );
 
 CREATE TABLE FUNCIONARIO (
-    cpf             VARCHAR(11) NOT NULL PRIMARY KEY,
-    end_fisico      VARCHAR(50) NOT NULL,
-    fone_contato    VARCHAR(12) NOT NULL,
-    dt_nasc         DATETIME NOT NULL,
-    nome            VARCHAR(50) NOT NULL,
+    cpf             VARCHAR(11) NOT NULL,
     salario         FLOAT NOT NULL,
-    dt_inicio_trab  DATETIME NOT NULL,
-    ativo           BOOLEAN NOT NULL
-);
+    dt_inicio_trab  DATE NOT NULL,
+    ativo           BOOLEAN NOT NULL,
 
-CREATE TABLE ENFERMEIRO (
-    cpf             VARCHAR(11) NOT NULL PRIMARY KEY,
-    end_fisico      VARCHAR(50) NOT NULL,
-    fone_contato    VARCHAR(12) NOT NULL,
-    dt_nasc         DATETIME NOT NULL,
-    nome            VARCHAR(50) NOT NULL,
-    salario         FLOAT NOT NULL,
-    dt_inicio_trab  DATETIME NOT NULL,
-    ativo           BOOLEAN NOT NULL
-);
-
-CREATE TABLE MEDICO (
-    cpf             VARCHAR(11) NOT NULL PRIMARY KEY,
-    end_fisico      VARCHAR(50) NOT NULL,
-    fone_contato    VARCHAR(12) NOT NULL,
-    dt_nasc         DATETIME NOT NULL,
-    nome            VARCHAR(50) NOT NULL,
-    salario         FLOAT NOT NULL,
-    dt_inicio_trab  DATETIME NOT NULL,
-    ativo           BOOLEAN NOT NULL
+    FOREIGN KEY (cpf) REFERENCES PESSOA(cpf),
+    PRIMARY KEY (cpf)
 );
 
 CREATE TABLE HORARIO (
     cod         INT NOT NULL AUTO_INCREMENT,
     descricao   VARCHAR(25),
-    hr_inicial  VARCHAR(5) NOT NULL,
-    hr_final    VARCHAR(5) NOT NULL,
-    dia_semana  VARCHAR(3) NOT NULL,
+    hr_inicial  TIME NOT NULL,
+    hr_final    TIME NOT NULL,
+    dia_semana  ENUM( 'DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB' ) NOT NULL,
 
     PRIMARY KEY (cod)
 );
@@ -73,10 +48,15 @@ CREATE TABLE TRABALHA_EM (
     cod INT NOT NULL,
 
     FOREIGN KEY (cpf) REFERENCES FUNCIONARIO(cpf),
-    FOREIGN KEY (cpf) REFERENCES MEDICO(cpf),
-    FOREIGN KEY (cpf) REFERENCES ENFERMEIRO(cpf),
     FOREIGN KEY (cod) REFERENCES HORARIO(cod),
     PRIMARY KEY (cpf, cod)
+);
+
+CREATE TABLE ENFERMEIRO (
+    cpf VARCHAR(11) NOT NULL,
+
+    FOREIGN KEY (cpf) REFERENCES FUNCIONARIO(cpf),
+    PRIMARY KEY (cpf)
 );
 
 CREATE TABLE SALA (
@@ -151,6 +131,14 @@ CREATE TABLE COMBATE_SINTOMA (
     PRIMARY KEY (cod_medicamento, cod_sintoma)
 );
 
+CREATE TABLE MEDICO (
+    cpf VARCHAR(11) NOT NULL,
+    crm VARCHAR(20) NOT NULL,
+
+    FOREIGN KEY (cpf) REFERENCES FUNCIONARIO(cpf),
+    PRIMARY KEY (cpf)
+);
+
 CREATE TABLE AREA_ATUACAO (
     cod             INT NOT NULL AUTO_INCREMENT,
     cod_macro_area  INT,
@@ -161,11 +149,12 @@ CREATE TABLE AREA_ATUACAO (
 );
 
 CREATE TABLE FORMADO_EM (
-    cod             INT NOT NULL AUTO_INCREMENT,
-    cpf             VARCHAR(11) NOT NULL,
+    cod INT NOT NULL,
+    cpf VARCHAR(11) NOT NULL,
 
+    FOREIGN KEY (cod) REFERENCES AREA_ATUACAO (cod),
     FOREIGN KEY (cpf) REFERENCES MEDICO (cpf),
-    PRIMARY KEY (cod)
+    PRIMARY KEY (cod, cpf)
 );
 
 CREATE TABLE CONSULTA (
@@ -184,7 +173,7 @@ CREATE TABLE CONSULTA (
 CREATE TABLE ENCAMINHAMENTO (
     cod             INT NOT NULL AUTO_INCREMENT,
     motivo          VARCHAR(255) NOT NULL,
-    descricao       VARCHAR(255) NOT NULL,
+    descricao       VARCHAR(255),
     dt_vencimento   DATETIME NOT NULL,
     cpf_med         VARCHAR(11) NOT NULL,
     cpf_pct         VARCHAR(11) NOT NULL,
@@ -195,7 +184,7 @@ CREATE TABLE ENCAMINHAMENTO (
 );
 
 CREATE TABLE RECEITA (
-    cod_medicamento   INT NOT NULL,
+    cod_medicamento INT NOT NULL,
     cpf_med         VARCHAR(11) NOT NULL,
     cpf_pct         VARCHAR(11) NOT NULL,
     dt_atend        DATETIME NOT NULL,
@@ -206,5 +195,3 @@ CREATE TABLE RECEITA (
     FOREIGN KEY (cpf_med, cpf_pct, dt_atend) REFERENCES CONSULTA (cpf_med, cpf_pct, dt_atend),
     PRIMARY KEY (cod_medicamento, cpf_med, cpf_pct, dt_atend)
 );
-
-

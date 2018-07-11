@@ -47,7 +47,7 @@ MEDICO ( cpf ) __REFERENCIA__ FUNCIONARIO ( cpf )
 AREA_ATUACAO ( __<ins>id_area</ins>__, id_macro_area, descricao )  
 AREA_ATUACAO ( id_macro_area ) __REFERENCIA__ AREA_ATUACAO ( id_area )  
 
-FORMADO_EM ( __<ins>id_area</ins>__, cpf )  
+FORMADO_EM ( __<ins>id_area, cpf</ins>__ )  
 FORMADO_EM ( cpf ) __REFERENCIA__ MEDICO ( cpf )  
 FORMADO_EM ( id_area ) __REFERENCIA__ AREA_ATUACAO ( id_area )  
 
