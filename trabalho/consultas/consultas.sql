@@ -12,8 +12,8 @@ WHERE p.nome = 'Elnora Underwood' AND (c.dt_atend = '2018-05-01' OR c.dt_atend =
 SELECT p.nome
 FROM ((((SALA AS s JOIN PESSOA AS f ON s.enf_gerente = f.cpf) JOIN INTERNACAO AS i ON s.numero = i.numero) JOIN CONSULTA AS c ON c.cpf_pct = i.cpf_pct) JOIN PESSOA AS m ON m.cpf = c.cpf_med)
 WHERE m.nome = 'Linnie Hunter' AND f.cpf IN (SELECT e.cpf
-					     FROM ((ENFERMEIRO AS e JOIN TRABALHA_EM AS t 						     ON t.cpf = e.cpf) JOIN HORARIO AS h ON h.cod = 					             t.cod)  
-					     WHERE (h.hr_inicial = '13:00' OR h.hr_inicial 						     = '12:00' OR h.hr_inicial = '14:00'              						     OR h.hr_inicial = '15:00' OR h.hr_inicial = "16:00"   						     OR h.hr_inicial = "17:00") AND (h.hr_final = "13:00" OR 					             h.hr_final = "14:00" OR h.hr_final = "15:00" OR h.hr_final 					     = "16:00" OR h.hr_final = "17:00" OR h.hr_final = "18:00")
+					     FROM ((ENFERMEIRO AS e JOIN TRABALHA_EM AS t ON t.cpf = e.cpf) JOIN HORARIO AS h ON h.cod = t.cod)  
+					     WHERE (h.hr_inicial = '13:00' OR h.hr_inicial = '12:00' OR h.hr_inicial = '14:00' OR h.hr_inicial = '15:00' OR h.hr_inicial = "16:00" OR h.hr_inicial = "17:00") AND (h.hr_final = "13:00" OR h.hr_final = "14:00" OR h.hr_final = "15:00" OR h.hr_final = "16:00" OR h.hr_final = "17:00" OR h.hr_final = "18:00")
 
 SELECT d.nome, s.cod, s.descricao, s.gravidade
 FROM (((SIMTOMA_PCT AS sp JOIN SINTOMA AS s ON sp.simtoma = s.cod) JOIN CONSULTA AS c ON s.cpf = c.cpf_pct) JOIN INTERNACAO AS i ON i.cpf = s.cpf) JOIN PESSOA AS m ON m.cpf = s.cpf) JOIN PESSOA AS d ON d.cpf = sp.cpf)
@@ -52,7 +52,7 @@ WHERE s.descricao LIKE '%Febre%' AND NOT EXISTS (SELECT *
 SELECT AVG(f.salario)
 FROM (((ENFERMEIRO AS e JOIN FUNCIONARIO AS f ON e.cpf = f.cpf) JOIN PESSOA AS p ON p.cpf = e.cpf) JOIN TRABALHA_EM AS t ON t.cpf = e.cpf) JOIN HORARIO AS h ON h.cod = t.cod) 
 WHERE f.sexo = 'M' AND h.descricao LIKE '%noite%' AND f.salario > ANY (SELECT n.salario 
-								       FROM FUNCIONARIO AS n JOIN 									       ENFERMEIRO AS d) ON n.cpf = d.cpf)
+								       FROM ((FUNCIONARIO AS n JOIN ENFERMEIRO AS d) ON n.cpf = d.cpf)
 
 SELECT m.descricao
 FROM ((MEDICAMENTO AS m JOIN RECEITA AS r ON m.cod = r.cod_medicamento) JOIN SINTOMA_PCT AS s ON s.cpf = r.cpf_pct)
