@@ -690,24 +690,24 @@ INSERT INTO FORMADO_EM VALUES (2, '99876173243');
 INSERT INTO FORMADO_EM VALUES (5, '99876173243');
 INSERT INTO FORMADO_EM VALUES (4, '99876173243');
 
-INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
-VALUES ('motivo', 'descricao', '2019-01-01', '12341234132', '65465464654', '2018-05-01');
-INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
-VALUES ('motivo', 'descricao', '2019-01-01', '35654623432', '65465464654', '2018-05-01');
-INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
-VALUES ('motivo', 'descricao', '2019-01-01', '35654623432', '05615151895', '2018-07-01');
-INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
-VALUES ('motivo', 'descricao', '2019-01-01', '25113423442', '57981681919', '2018-04-01');
-INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
-VALUES ('motivo', 'descricao', '2019-01-01', '23452345243', '57981681919', '2018-04-01');
+-- INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
+-- VALUES ('motivo', 'descricao', '2019-01-01', '12341234132', '65465464654', '2018-05-01');
+-- INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
+-- VALUES ('motivo', 'descricao', '2019-01-01', '35654623432', '65465464654', '2018-05-01');
+-- INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
+-- VALUES ('motivo', 'descricao', '2019-01-01', '35654623432', '05615151895', '2018-07-01');
+-- INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
+-- VALUES ('motivo', 'descricao', '2019-01-01', '25113423442', '57981681919', '2018-04-01');
+-- INSERT INTO ENCAMINHAMENTO (motivo, descricao, dt_vencimento, cpf_med, cpf_pct, dt_atend)
+-- VALUES ('motivo', 'descricao', '2019-01-01', '23452345243', '57981681919', '2018-04-01');
 
-INSERT INTO RECEITA 
-VALUES (1, '35654623432', '65465464654', '2018-05-01', '2019-01-01', 'observacao');
-INSERT INTO RECEITA 
-VALUES (2, '12341234132', '65465464654', '2018-05-01', '2019-01-01', 'observacao');
-INSERT INTO RECEITA 
-VALUES (3, '35654623432', '65465464654', '2018-05-01', '2019-01-01', 'observacao');
-INSERT INTO RECEITA 
-VALUES (1, '25113423442', '57981681919', '2018-04-01', '2019-01-01', 'observacao');
-INSERT INTO RECEITA 
-VALUES (2, '23452345243', '57981681919', '2018-04-01', '2019-01-01', 'observacao');
+-- INSERT INTO RECEITA 
+-- VALUES (1, '35654623432', '65465464654', '2018-05-01', '2019-01-01', 'observacao');
+-- INSERT INTO RECEITA 
+-- VALUES (2, '12341234132', '65465464654', '2018-05-01', '2019-01-01', 'observacao');
+-- INSERT INTO RECEITA 
+-- VALUES (3, '35654623432', '65465464654', '2018-05-01', '2019-01-01', 'observacao');
+-- INSERT INTO RECEITA 
+-- VALUES (1, '25113423442', '57981681919', '2018-04-01', '2019-01-01', 'observacao');
+-- INSERT INTO RECEITA 
+-- VALUES (2, '23452345243', '57981681919', '2018-04-01', '2019-01-01', 'observacao');
