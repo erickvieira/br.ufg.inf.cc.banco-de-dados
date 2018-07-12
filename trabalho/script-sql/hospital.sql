@@ -210,7 +210,7 @@ INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo)
 VALUES ('33781338876', 'RUA 22-A', '17886347936', STR_TO_DATE('31-03-1992', '%d-%m-%Y'), 'Jack Farmer', null); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
 VALUES ('80589385421', 'RUA 51-A', '64239278156', STR_TO_DATE('09-11-1981', '%d-%m-%Y'), 'Hannah Fields', 'F'); -- 
-INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo);
+INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo)
 VALUES ('95824797675', 'RUA 09-G', '97399503309', STR_TO_DATE('08-11-2007', '%d-%m-%Y'), 'Julia Curtis', 'F'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
 VALUES ('48334591197', 'RUA 01-T', '61584726823', STR_TO_DATE('06-02-2012', '%d-%m-%Y'), 'Francis Pittman', 'M'); -- 
@@ -479,17 +479,17 @@ INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
 VALUES (46, 4, 3, '52695183996');
 
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES ('56165165165', 21, STR_TO_DATE('19-06-2018', '%d-%m-%Y'), STR_TO_DATE('20-06-2018', '%d-%m-%Y'), 'Suspeita de dengue');
+VALUES ('95824797675', 21, STR_TO_DATE('19-06-2018', '%d-%m-%Y'), STR_TO_DATE('20-06-2018', '%d-%m-%Y'), 'Suspeita de dengue');
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES ('65465464654', 36, STR_TO_DATE('01-06-2018', '%d-%m-%Y'), STR_TO_DATE('03-06-2018', '%d-%m-%Y'), 'Acidente de trânsito');
+VALUES ('68979553587', 36, STR_TO_DATE('01-06-2018', '%d-%m-%Y'), STR_TO_DATE('03-06-2018', '%d-%m-%Y'), 'Acidente de trânsito');
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES ('57981681919', 22, STR_TO_DATE('29-06-2018', '%d-%m-%Y'), STR_TO_DATE('03-07-2018', '%d-%m-%Y'), 'Acompanhamento');
+VALUES ('48334591197', 22, STR_TO_DATE('29-06-2018', '%d-%m-%Y'), STR_TO_DATE('03-07-2018', '%d-%m-%Y'), 'Acompanhamento');
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES ('05656515166', 45, STR_TO_DATE('29-06-2018', '%d-%m-%Y'), STR_TO_DATE('02-07-2018', '%d-%m-%Y'), null);
+VALUES ('75369310658', 45, STR_TO_DATE('29-06-2018', '%d-%m-%Y'), STR_TO_DATE('02-07-2018', '%d-%m-%Y'), null);
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES ('05615151895', 12, STR_TO_DATE('30-06-2018', '%d-%m-%Y'), null, null);
+VALUES ('95824797675', 12, STR_TO_DATE('30-06-2018', '%d-%m-%Y'), null, null);
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES ('56165165165', 12, STR_TO_DATE('30-06-2018', '%d-%m-%Y'), null, null);
+VALUES ('63838702267', 12, STR_TO_DATE('30-06-2018', '%d-%m-%Y'), null, null);
 
 INSERT INTO FICHA_PCT
 VALUES ('56165165165', '2018-05-21', 'Observacao', 50.50, 1.80, '12356675673');
