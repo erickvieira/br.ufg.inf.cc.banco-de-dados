@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>descricao-do-projeto.md</title>
+<title>README.md</title>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
 <style>
@@ -394,7 +394,7 @@ blockquote {
 <li><a href="github.com/FerreiraRaphael">Raphael Ferreira</a> - 201400171</li>
 </ul>
 <h3 id="reposit%C3%B3rio">Repositório:</h3>
-<p>Para maiores informações a respeito do desenvolvimento do projeto, acesse o link a baixo, que contém todos os arquivos produzidos pelo grupo:<br>
+<p>Para maiores informações a respeito do desenvolvimento do projeto, disponibilizamos o mesmo no GitHub, onde estão todos os arquivos produzidos pelo grupo:<br>
 <a href="https://github.com/erickvieira/br.ufg.inf.cc.banco-de-dados/">https://github.com/erickvieira/br.ufg.inf.cc.banco-de-dados/</a></p>
 <h3 id="descri%C3%A7%C3%A3o-do-problema">Descrição do Problema:</h3>
 <p>Este projeto se dedica a modelar a estrutura de um Banco de Dados que visa atender à demanda de Hospitais e Clínicas que fazem uso do modelo de negócio voltado para <strong>plantões</strong> e <strong>consultas casuais</strong>. Portanto, esse BD não se compromete a cubrir outros pontos da gestão e do dia-a-dia de um hospital que não se encaixe nesse cenário; Mais especificamente, que não esteja relacionado às consultas do plantão ou às internações.</p>
@@ -411,43 +411,178 @@ blockquote {
 <li>Assistente Pessoal do Médico:</li>
 </ol>
 <ul>
-<li>Mostrar salas com mais de 3 pacientes do Médico &quot;Ricardo&quot;</li>
-<li>Listar nome e sintoma dos Pacientes do médico &quot;João&quot; que tem retorno marcado para os próximos três dias seguinte a 22.07.2018</li>
-<li>Mostrar Enfermeiro responsável pela sala dos pacientes do médico &quot;Ricardo&quot; no turno Vespertino</li>
-<li>Listar nomes e sintomas dos Pacientes do médico &quot;João&quot; na sala 5</li>
+<li>Mostrar salas com mais de 1 paciente</li>
+<li>Listar nome e sintoma dos Pacientes do médico &quot;Elnora Underwood&quot;</li>
+<li>Mostrar número da sala e nome do enfermeiro responsavel onde há pacientes da médica &quot;Hannah Fields&quot; no turno Vespertino</li>
+<li>Listar nomes e sintomas dos Pacientes do médico &quot;Minnie Tyler&quot; na sala 5</li>
 </ul>
 <ol start="2">
-<li>Medico:</li>
+<li>Médico:</li>
 </ol>
 <ul>
-<li>Listar medicamentos fornecidos por &quot;Teuto&quot; com preço abaixo de 30 reais</li>
-<li>Listar sintomas ordenados crescentemente por quantidade de pacientes</li>
-<li>Verificar o remédio mais receitado para o sintoma &quot;dor de cabeça&quot;</li>
-<li>Mostrar a idade média dos pacientes com &quot;Febre&quot;</li>
+<li>Descrição dos medicamentos que combatam febre abaixo de 30 reais</li>
+<li>Sintomas mais comuns em pacientes por ordem decrescente no dia: 2018-05-01</li>
+<li>Verificar a descrição dos remédios mais receitados para o sintoma &quot;Dengue&quot; no mês de Maio de 2018</li>
+<li>Mostrar soma da gravidade dos sintomas dos pacientes diagnosticados com febre.</li>
 </ul>
 <ol start="3">
 <li>Diretor:</li>
 </ol>
 <ul>
-<li>Listar media salarial das enfermeiras do sexo feminino e que trabalham no periodo noturno</li>
+<li>Listar media salarial das enfermeiras do sexo feminino e que trabalham no periodo noturno excluindo o menor salario</li>
+<li>Mostrar descrição dos medicamentos que combatem o sintoma dengue</li>
+<li>Mostrar especialidades com mais de 4 médicos, sexo masculino e que não exista outro dessa especialidade na mesma área</li>
 <li>Mostrar especialidades médicas e suas médias salariais</li>
-<li>Mostrar nome e quantidade de medicamentos acima de 100 reais receitados para o sintoma &quot;diarreia&quot;</li>
-<li>Mostrar especialidades com mais de 2 médicos do sexo masculino com mais de 65 anos e que ganham mais de 15 mil reais</li>
 </ul>
 <ol start="4">
 <li>Balconista:</li>
 </ol>
 <ul>
 <li>Mostrar número das salas que ainda possuem leitos disponíveis</li>
-<li>Mostrar nome e idade dos médicos especialistas em &quot;cardiologia&quot; disponíveis no periodo matutino e ordenados decrescentemente pela idade</li>
-<li>Mostrar número da sala e estado do paciente &quot;José&quot; que foi internado no dia 22.04.2018</li>
-<li>mostrar quantidade de pessoas por estado programadas para sairem nos próximos três dias</li>
+<li>Mostrar nome dos médicos especialistas em &quot;cardiologia&quot; disponíveis no periodo matutino e ordenados decrescentemente pela idade</li>
+<li>Mostrar número da sala e estado dos pacientes &quot;Smith&quot; que foi internado no dia 22.04.2018</li>
+<li>Mostar quantidade de pessoas por gravidade de sintomas</li>
 </ul>
 <hr>
 <h4 id="%E2%97%AF-em-sql">◯ Em <strong>SQL</strong></h4>
-<ul>
-<li><em>ainda a fazer</em></li>
-</ul>
+<pre><code>-- ASSISTENTE DO MEDICO
+SELECT COUNT(numero) AS qtd_pacientes, numero
+FROM SALA JOIN INTERNACAO I on SALA.numero = I.num_sala
+WHERE   dt_alta IS NULL
+GROUP BY numero
+HAVING COUNT(numero) > 1;
+
+SELECT P2.nome, S.descricao
+FROM PACIENTE P
+  JOIN FICHA_PCT F ON P.cpf = F.cpf_pct
+  JOIN CONSULTA C ON F.cpf_pct = C.cpf_pct AND F.dt_triagem = C.dt_triagem
+  JOIN SINTOMA_PCT SP ON P.cpf = SP.cpf_pct AND F.dt_triagem = SP.dt_triagem
+  JOIN SINTOMA S ON SP.cod_sintoma = S.cod
+  JOIN MEDICO M ON M.cpf =  C.cpf_med
+  JOIN PESSOA P2 ON P.cpf = P2.cpf
+  JOIN PESSOA P3 ON M.cpf = P3.cpf
+  JOIN INTERNACAO I on P.cpf = I.cpf_pct
+WHERE   P3.nome LIKE 'Elnora%' AND I.dt_alta IS NULL;
+
+SELECT m.nome
+FROM SALA AS s
+  JOIN PESSOA AS f ON s.enf_gerente = f.cpf
+  JOIN INTERNACAO AS i ON s.numero = i.num_sala
+  JOIN CONSULTA AS c ON c.cpf_pct = i.cpf_pct
+  JOIN PESSOA AS m ON m.cpf = c.cpf_med
+WHERE m.nome LIKE '%a%' AND f.cpf IN (
+  SELECT e.cpf
+  FROM ENFERMEIRO AS e 
+    JOIN TRABALHA_EM AS t ON t.cpf = e.cpf 
+    JOIN HORARIO AS h ON h.cod = t.cod
+  WHERE h.hr_inicial BETWEEN '12:01' AND '17:59'
+  AND h.hr_final BETWEEN '12:01' AND '17:59'
+);
+
+SELECT d.nome, s.cod, s.descricao, s.gravidade
+FROM SINTOMA_PCT AS sp
+  JOIN SINTOMA AS s ON sp.cod_sintoma = s.cod
+  JOIN CONSULTA AS c ON c.cpf_pct = sp.cpf_pct
+  JOIN INTERNACAO AS i ON i.cpf_pct = sp.cpf_pct
+  JOIN PESSOA AS m ON m.cpf = sp.cpf_pct
+  JOIN PESSOA AS d ON d.cpf = sp.cpf_pct
+WHERE m.nome = 'Minnie Tyler' AND i.num_sala = 5;
+
+-- MEDICO
+-- DESCRIÇÃO DOS REMEDIOS QUE COMBATAM O SINTOMA FEBRE BAIXA ABAIXO DE 30 REAIS
+SELECT m.descricao
+FROM MEDICAMENTO AS m
+  JOIN COMBATE_SINTOMA AS c ON c.cod_medicamento = m.cod
+  JOIN SINTOMA AS s ON s.cod = c.cod_sintoma
+WHERE m.preco_unit < 30 AND s.cod = 3
+GROUP BY m.descricao;
+
+-- SINTOMAS MAIS COMUNS EM PACIENTES POR ORDEM ENTRE NO DIA: 2018-05-01
+SELECT s.cod_sintoma, COUNT(s.cpf_pct) as cpfs
+FROM SINTOMA_PCT AS s
+  JOIN CONSULTA AS c ON c.cpf_pct = s.cpf_pct
+WHERE c.dt_atend = '2018-05-01'
+GROUP BY s.cod_sintoma
+ORDER BY COUNT(cpfs) DESC;
+
+-- VERIFICAR A DESCRICAO DOS REMEDIOS MAIS RECEITADOS PARA O SINTOMA DOR DE CABEÇA NO MES DE MAIO DE 2018
+SELECT r.cod_medicamento, m.descricao, COUNT(*) as counter
+FROM RECEITA AS r
+  JOIN MEDICAMENTO AS m ON r.cod_medicamento = m.cod
+  JOIN COMBATE_SINTOMA AS cm ON cm.cod_medicamento = m.cod
+WHERE m.descricao = 'Dor de cabeça' AND r.dt_atend LIKE '%-05-%'
+GROUP BY r.cod_medicamento
+ORDER BY COUNT(counter);
+
+-- MOSTRAR SOMA DA GRAVIDADE DOS SINTOMAS DOS PACIENTES DIAGNOSTICADOS COM FEBRE QUE NÃO TENHAM UM SINTOMA GRAVIDADE 1 E QUE SÃO GESTANTES
+-- REFAZER IDADE
+SELECT SUM(s.gravidade)
+FROM PACIENTE AS p
+  JOIN PESSOA AS i ON p.cpf = i.cpf
+  JOIN SINTOMA_PCT AS c ON c.cpf_PCT = p.cpf
+  JOIN SINTOMA AS s ON s.cod = c.cod_sintoma
+WHERE s.descricao LIKE '%Febre%' AND NOT EXISTS (SELECT *
+  FROM PACIENTE AS a JOIN SINTOMA_PCT AS b ON a.cpf = b.cpf_pct);
+
+-- DIRETOR
+-- EXCLUINDO O MENOR SALARIO
+SELECT AVG(f.salario)
+FROM ENFERMEIRO AS e
+  JOIN FUNCIONARIO AS f ON e.cpf = f.cpf
+  JOIN PESSOA AS p ON p.cpf = e.cpf
+  JOIN TRABALHA_EM AS t ON t.cpf = e.cpf
+  JOIN HORARIO AS h ON h.cod = t.cod
+WHERE p.sexo = 'M' AND h.descricao LIKE '%noite%' AND f.salario > ANY (SELECT n.salario
+  FROM FUNCIONARIO AS n JOIN ENFERMEIRO AS d ON n.cpf = d.cpf);
+
+SELECT m.descricao
+FROM MEDICAMENTO AS m
+  JOIN RECEITA AS r ON m.cod = r.cod_medicamento
+  JOIN SINTOMA_PCT AS s ON s.cpf_pct = r.cpf_pct
+WHERE m.preco_unit < 100 AND s.cod_sintoma = 1;
+
+-- Mostrar especialidades com mais de 4 médicos, sexo masculino e que não exista outro dessa mesma especialidade area
+SELECT a.cod_macro_area
+FROM FORMADO_EM AS f JOIN MEDICO AS m ON m.cpf = f.cpf
+  JOIN PESSOA AS p ON m.cpf = p.cpf
+  JOIN AREA_ATUACAO AS a ON a.cod = f.cod
+WHERE p.sexo = 'H' AND NOT EXISTS (SELECT *
+  FROM AREA_ATUACAO AS b
+  WHERE a.cod_macro_area = b.cod_macro_area)
+GROUP BY a.cod_macro_area
+HAVING COUNT(*) > 4;
+
+-- BALCONISTA
+SELECT s.numero
+FROM SALA AS s
+  JOIN INTERNACAO AS i ON i.num_sala = s.numero
+  JOIN PACIENTE AS p ON p.cpf = i.cpf_pct
+GROUP BY s.numero;
+
+SELECT p.nome, h.hr_inicial, h.hr_final
+FROM MEDICO AS m
+  JOIN FORMADO_EM AS a ON a.cpf = m.cpf
+  JOIN TRABALHA_EM AS t ON t.cpf = m.cpf
+  JOIN HORARIO AS h ON h.cod = t.cod
+  JOIN PESSOA AS p ON p.cpf = m.cpf
+WHERE h.descricao LIKE '%matutino%'
+ORDER BY p.nome;
+
+SELECT i.num_sala, s.gravidade
+FROM INTERNACAO AS i
+  JOIN PACIENTE AS p ON i.cpf_pct = p.cpf
+  JOIN SINTOMA_PCT AS sp ON sp.cpf_pct = p.cpf
+  JOIN SINTOMA AS s ON sp.cod_sintoma = s.cod
+  JOIN PESSOA AS a ON a.cpf = p.cpf
+WHERE a.nome LIKE 'JOSÉ%' AND i.dt_intern = '2018-04-22';
+
+SELECT S.gravidade, COUNT(p.cpf)
+FROM PACIENTE AS p
+  JOIN PESSOA AS a ON a.cpf = p.cpf
+  JOIN SINTOMA_PCT AS b ON b.cpf_pct = p.cpf
+  JOIN SINTOMA S ON b.cod_sintoma = S.cod
+GROUP BY S.gravidade
+HAVING COUNT(p.cpf) >= 1;</code></pre>
 <h3 id="diagrama-entidade-relacionamento">Diagrama Entidade Relacionamento:</h3>
 <p><img src="https://github.com/erickvieira/br.ufg.inf.cc.banco-de-dados/blob/master/trabalho/galeria/der.png?raw=true" alt="Diagrama Entidade Relacionamento"></p>
 <h3 id="modelo-relacional">Modelo Relacional:</h3>
@@ -507,7 +642,7 @@ CREATE TABLE PESSOA (
     fone_contato    VARCHAR(12) NOT NULL,
     dt_nasc         DATE NOT NULL,
     nome            VARCHAR(50) NOT NULL,
-    sexo            ENUM( &apos;M&apos;, &apos;F&apos; ),
+    sexo            ENUM( 'M', 'F' ),
 
     PRIMARY KEY (cpf)
 );
@@ -537,7 +672,7 @@ CREATE TABLE HORARIO (
     descricao   VARCHAR(25),
     hr_inicial  TIME NOT NULL,
     hr_final    TIME NOT NULL,
-    dia_semana  ENUM( &apos;DOM&apos;, &apos;SEG&apos;, &apos;TER&apos;, &apos;QUA&apos;, &apos;QUI&apos;, &apos;SEX&apos;, &apos;SAB&apos; ) NOT NULL,
+    dia_semana  ENUM( 'DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB' ) NOT NULL,
 
     PRIMARY KEY (cod)
 );
@@ -596,7 +731,7 @@ CREATE TABLE FICHA_PCT (
 CREATE TABLE SINTOMA (
     cod         INT NOT NULL AUTO_INCREMENT,
     descricao   VARCHAR(255) NOT NULL,
-    gravidade   ENUM(&apos;BAIXA&apos;, &apos;MEDIA&apos;, &apos;ALTA&apos;, &apos;MUITO_ALTA&apos;) NOT NULL,
+    gravidade   ENUM('BAIXA', 'MEDIA', 'ALTA', 'MUITO_ALTA') NOT NULL,
 
     PRIMARY KEY (cod)
 );
@@ -695,521 +830,521 @@ CREATE TABLE RECEITA (
     PRIMARY KEY (cod_medicamento, cpf_med, cpf_pct, dt_atend)
 );
 
--- INSER&#xC7;&#xC3;O DOS VALORES INICIAIS
+-- INSERÇÃO DOS VALORES INICIAIS
 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;85037528581&apos;, &apos;RUA 33-A&apos;, &apos;55452819976&apos;, STR_TO_DATE(&apos;21-04-1981&apos;, &apos;%d-%m-%Y&apos;), &apos;Bessie Ramsey&apos;, null); -- 
+VALUES ('85037528581', 'RUA 33-A', '55452819976', STR_TO_DATE('21-04-1981', '%d-%m-%Y'), 'Bessie Ramsey', null); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;63392999176&apos;, &apos;RUA 10-B&apos;, &apos;58952472673&apos;, STR_TO_DATE(&apos;13-10-1945&apos;, &apos;%d-%m-%Y&apos;), &apos;Dean WoodDaniel&apos;, &apos;M&apos;); -- 
+VALUES ('63392999176', 'RUA 10-B', '58952472673', STR_TO_DATE('13-10-1945', '%d-%m-%Y'), 'Dean WoodDaniel', 'M'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;63838702267&apos;, &apos;RUA 10-B&apos;, &apos;65946401830&apos;, STR_TO_DATE(&apos;09-08-1999&apos;, &apos;%d-%m-%Y&apos;), &apos;Birdie Patrick&apos;, null); -- 
+VALUES ('63838702267', 'RUA 10-B', '65946401830', STR_TO_DATE('09-08-1999', '%d-%m-%Y'), 'Birdie Patrick', null); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;86468766606&apos;, &apos;RUA 22-F&apos;, &apos;41672284496&apos;, STR_TO_DATE(&apos;31-03-1992&apos;, &apos;%d-%m-%Y&apos;), &apos;May Curtis&apos;, &apos;F&apos;); -- 
+VALUES ('86468766606', 'RUA 22-F', '41672284496', STR_TO_DATE('31-03-1992', '%d-%m-%Y'), 'May Curtis', 'F'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;33781338876&apos;, &apos;RUA 22-A&apos;, &apos;17886347936&apos;, STR_TO_DATE(&apos;31-03-1992&apos;, &apos;%d-%m-%Y&apos;), &apos;Jack Farmer&apos;, null); -- 
+VALUES ('33781338876', 'RUA 22-A', '17886347936', STR_TO_DATE('31-03-1992', '%d-%m-%Y'), 'Jack Farmer', null); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;80589385421&apos;, &apos;RUA 51-A&apos;, &apos;64239278156&apos;, STR_TO_DATE(&apos;09-11-1981&apos;, &apos;%d-%m-%Y&apos;), &apos;Hannah Fields&apos;, &apos;F&apos;); -- 
+VALUES ('80589385421', 'RUA 51-A', '64239278156', STR_TO_DATE('09-11-1981', '%d-%m-%Y'), 'Hannah Fields', 'F'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo)
-VALUES (&apos;95824797675&apos;, &apos;RUA 09-G&apos;, &apos;97399503309&apos;, STR_TO_DATE(&apos;08-11-2007&apos;, &apos;%d-%m-%Y&apos;), &apos;Julia Curtis&apos;, &apos;F&apos;); -- 
+VALUES ('95824797675', 'RUA 09-G', '97399503309', STR_TO_DATE('08-11-2007', '%d-%m-%Y'), 'Julia Curtis', 'F'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;48334591197&apos;, &apos;RUA 01-T&apos;, &apos;61584726823&apos;, STR_TO_DATE(&apos;06-02-2012&apos;, &apos;%d-%m-%Y&apos;), &apos;Francis Pittman&apos;, &apos;M&apos;); -- 
+VALUES ('48334591197', 'RUA 01-T', '61584726823', STR_TO_DATE('06-02-2012', '%d-%m-%Y'), 'Francis Pittman', 'M'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;39488553863&apos;, &apos;RUA 82-N&apos;, &apos;31134369687&apos;, STR_TO_DATE(&apos;27-06-1978&apos;, &apos;%d-%m-%Y&apos;), &apos;Barbara Guerrero&apos;, &apos;F&apos;); -- 
+VALUES ('39488553863', 'RUA 82-N', '31134369687', STR_TO_DATE('27-06-1978', '%d-%m-%Y'), 'Barbara Guerrero', 'F'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;68979553587&apos;, &apos;RUA 61-X&apos;, &apos;49527336752&apos;, STR_TO_DATE(&apos;21-12-1982&apos;, &apos;%d-%m-%Y&apos;), &apos;Lilly Smith&apos;, &apos;F&apos;); -- 
+VALUES ('68979553587', 'RUA 61-X', '49527336752', STR_TO_DATE('21-12-1982', '%d-%m-%Y'), 'Lilly Smith', 'F'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;58890651359&apos;, &apos;RUA 61-X&apos;, &apos;91726631640&apos;, STR_TO_DATE(&apos;08-03-1933&apos;, &apos;%d-%m-%Y&apos;), &apos;Luis Pittman&apos;, &apos;M&apos;); -- 
+VALUES ('58890651359', 'RUA 61-X', '91726631640', STR_TO_DATE('08-03-1933', '%d-%m-%Y'), 'Luis Pittman', 'M'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;99876173243&apos;, &apos;RUA 22-A&apos;, &apos;59669850072&apos;, STR_TO_DATE(&apos;02-01-1954&apos;, &apos;%d-%m-%Y&apos;), &apos;Elnora Underwood&apos;, &apos;M&apos;); -- 
+VALUES ('99876173243', 'RUA 22-A', '59669850072', STR_TO_DATE('02-01-1954', '%d-%m-%Y'), 'Elnora Underwood', 'M'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;52695183996&apos;, &apos;RUA 22-A&apos;, &apos;82968641924&apos;, STR_TO_DATE(&apos;10-03-1984&apos;, &apos;%d-%m-%Y&apos;), &apos;Eleanor McGuire&apos;, &apos;F&apos;); -- 
+VALUES ('52695183996', 'RUA 22-A', '82968641924', STR_TO_DATE('10-03-1984', '%d-%m-%Y'), 'Eleanor McGuire', 'F'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;39755566639&apos;, &apos;RUA 22-A&apos;, &apos;19144267439&apos;, STR_TO_DATE(&apos;09-11-1983&apos;, &apos;%d-%m-%Y&apos;), &apos;Mike Clark&apos;, &apos;M&apos;); -- 
+VALUES ('39755566639', 'RUA 22-A', '19144267439', STR_TO_DATE('09-11-1983', '%d-%m-%Y'), 'Mike Clark', 'M'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;83155702995&apos;, &apos;RUA 22-A&apos;, &apos;33639432312&apos;, STR_TO_DATE(&apos;27-05-1975&apos;, &apos;%d-%m-%Y&apos;), &apos;Amelia Lopez&apos;, &apos;F&apos;); -- 
+VALUES ('83155702995', 'RUA 22-A', '33639432312', STR_TO_DATE('27-05-1975', '%d-%m-%Y'), 'Amelia Lopez', 'F'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;45389849597&apos;, &apos;RUA 22-A&apos;, &apos;14621317281&apos;, STR_TO_DATE(&apos;08-09-1967&apos;, &apos;%d-%m-%Y&apos;), &apos;Corey Oliver&apos;, &apos;M&apos;); -- 
+VALUES ('45389849597', 'RUA 22-A', '14621317281', STR_TO_DATE('08-09-1967', '%d-%m-%Y'), 'Corey Oliver', 'M'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;81084725304&apos;, &apos;RUA 22-A&apos;, &apos;51047675057&apos;, STR_TO_DATE(&apos;04-09-1978&apos;, &apos;%d-%m-%Y&apos;), &apos;Linnie Hunter&apos;, null); -- 
+VALUES ('81084725304', 'RUA 22-A', '51047675057', STR_TO_DATE('04-09-1978', '%d-%m-%Y'), 'Linnie Hunter', null); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;75369310658&apos;, &apos;RUA 22-A&apos;, &apos;60421146792&apos;, STR_TO_DATE(&apos;18-08-1988&apos;, &apos;%d-%m-%Y&apos;), &apos;Manuel Turner&apos;, &apos;M&apos;); -- 
+VALUES ('75369310658', 'RUA 22-A', '60421146792', STR_TO_DATE('18-08-1988', '%d-%m-%Y'), 'Manuel Turner', 'M'); -- 
 INSERT INTO PESSOA (cpf, end_fisico, fone_contato, dt_nasc, nome, sexo) 
-VALUES (&apos;12567794423&apos;, &apos;RUA 22-A&apos;, &apos;52789391537&apos;, STR_TO_DATE(&apos;13-02-1992&apos;, &apos;%d-%m-%Y&apos;), &apos;Minnie Tyler&apos;, &apos;F&apos;); -- 
+VALUES ('12567794423', 'RUA 22-A', '52789391537', STR_TO_DATE('13-02-1992', '%d-%m-%Y'), 'Minnie Tyler', 'F'); -- 
 
 INSERT INTO PACIENTE (cpf, gestante, cpf_acompanhante) 
-VALUES (&apos;95824797675&apos;, false, &apos;86468766606&apos;);
+VALUES ('95824797675', false, '86468766606');
 INSERT INTO PACIENTE (cpf, gestante, cpf_acompanhante) 
-VALUES (&apos;68979553587&apos;, true, null);
+VALUES ('68979553587', true, null);
 INSERT INTO PACIENTE (cpf, gestante, cpf_acompanhante) 
-VALUES (&apos;48334591197&apos;, false, &apos;58890651359&apos;);
+VALUES ('48334591197', false, '58890651359');
 INSERT INTO PACIENTE (cpf, gestante, cpf_acompanhante) 
-VALUES (&apos;75369310658&apos;, false, null);
+VALUES ('75369310658', false, null);
 INSERT INTO PACIENTE (cpf, gestante, cpf_acompanhante) 
-VALUES (&apos;63838702267&apos;, true, &apos;85037528581&apos;);
+VALUES ('63838702267', true, '85037528581');
 
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;85037528581&apos;, STR_TO_DATE(&apos;21-08-2005&apos;, &apos;%d-%m-%Y&apos;), true, 13404.51);
+VALUES ('85037528581', STR_TO_DATE('21-08-2005', '%d-%m-%Y'), true, 13404.51);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;80589385421&apos;, STR_TO_DATE(&apos;05-08-2015&apos;, &apos;%d-%m-%Y&apos;), true, 7095.00);
+VALUES ('80589385421', STR_TO_DATE('05-08-2015', '%d-%m-%Y'), true, 7095.00);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;99876173243&apos;, STR_TO_DATE(&apos;02-07-2012&apos;, &apos;%d-%m-%Y&apos;), true, 12524.32);
+VALUES ('99876173243', STR_TO_DATE('02-07-2012', '%d-%m-%Y'), true, 12524.32);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;81084725304&apos;, STR_TO_DATE(&apos;30-11-1999&apos;, &apos;%d-%m-%Y&apos;), true, 4527.03);
+VALUES ('81084725304', STR_TO_DATE('30-11-1999', '%d-%m-%Y'), true, 4527.03);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;39488553863&apos;, STR_TO_DATE(&apos;11-09-2001&apos;, &apos;%d-%m-%Y&apos;), false, 9930.69);
+VALUES ('39488553863', STR_TO_DATE('11-09-2001', '%d-%m-%Y'), false, 9930.69);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;12567794423&apos;, STR_TO_DATE(&apos;30-05-2017&apos;, &apos;%d-%m-%Y&apos;), true, 7522.25);
+VALUES ('12567794423', STR_TO_DATE('30-05-2017', '%d-%m-%Y'), true, 7522.25);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;45389849597&apos;, STR_TO_DATE(&apos;23-07-2008&apos;, &apos;%d-%m-%Y&apos;), true, 21080.30);
+VALUES ('45389849597', STR_TO_DATE('23-07-2008', '%d-%m-%Y'), true, 21080.30);
 
 INSERT INTO MEDICO (cpf, crm) 
-VALUES (&apos;85037528581&apos;, &apos;59206458881963040001&apos;);
+VALUES ('85037528581', '59206458881963040001');
 INSERT INTO MEDICO (cpf, crm) 
-VALUES (&apos;80589385421&apos;, &apos;77863655532710260002&apos;);
+VALUES ('80589385421', '77863655532710260002');
 INSERT INTO MEDICO (cpf, crm) 
-VALUES (&apos;99876173243&apos;, &apos;62097496287897230001&apos;);
+VALUES ('99876173243', '62097496287897230001');
 INSERT INTO MEDICO (cpf, crm) 
-VALUES (&apos;81084725304&apos;, &apos;73397834121715280006&apos;);
+VALUES ('81084725304', '73397834121715280006');
 INSERT INTO MEDICO (cpf, crm) 
-VALUES (&apos;39488553863&apos;, &apos;45455496117938310001&apos;);
+VALUES ('39488553863', '45455496117938310001');
 INSERT INTO MEDICO (cpf, crm) 
-VALUES (&apos;12567794423&apos;, &apos;45051803900860250009&apos;);
+VALUES ('12567794423', '45051803900860250009');
 INSERT INTO MEDICO (cpf, crm) 
-VALUES (&apos;45389849597&apos;, &apos;47034927573986350001&apos;);
+VALUES ('45389849597', '47034927573986350001');
 
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;83155702995&apos;, STR_TO_DATE(&apos;18-07-2008&apos;, &apos;%d-%m-%Y&apos;), false, 1830.22);
+VALUES ('83155702995', STR_TO_DATE('18-07-2008', '%d-%m-%Y'), false, 1830.22);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;39755566639&apos;, STR_TO_DATE(&apos;21-03-2010&apos;, &apos;%d-%m-%Y&apos;), true, 1830.22);
+VALUES ('39755566639', STR_TO_DATE('21-03-2010', '%d-%m-%Y'), true, 1830.22);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;52695183996&apos;, STR_TO_DATE(&apos;09-05-2010&apos;, &apos;%d-%m-%Y&apos;), true, 1830.22);
+VALUES ('52695183996', STR_TO_DATE('09-05-2010', '%d-%m-%Y'), true, 1830.22);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;86468766606&apos;, STR_TO_DATE(&apos;11-11-2003&apos;, &apos;%d-%m-%Y&apos;), true, 1830.22);
+VALUES ('86468766606', STR_TO_DATE('11-11-2003', '%d-%m-%Y'), true, 1830.22);
 
 INSERT INTO ENFERMEIRO (cpf) 
-VALUES (&apos;83155702995&apos;);
+VALUES ('83155702995');
 INSERT INTO ENFERMEIRO (cpf) 
-VALUES (&apos;39755566639&apos;);
+VALUES ('39755566639');
 INSERT INTO ENFERMEIRO (cpf) 
-VALUES (&apos;52695183996&apos;);
+VALUES ('52695183996');
 INSERT INTO ENFERMEIRO (cpf) 
-VALUES (&apos;86468766606&apos;);
+VALUES ('86468766606');
 
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;33781338876&apos;, STR_TO_DATE(&apos;06-02-1978&apos;, &apos;%d-%m-%Y&apos;), true, 103852.01);
+VALUES ('33781338876', STR_TO_DATE('06-02-1978', '%d-%m-%Y'), true, 103852.01);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;63838702267&apos;, STR_TO_DATE(&apos;03-11-2017&apos;, &apos;%d-%m-%Y&apos;), true, 987.65);
+VALUES ('63838702267', STR_TO_DATE('03-11-2017', '%d-%m-%Y'), true, 987.65);
 INSERT INTO FUNCIONARIO (cpf, dt_inicio_trab, ativo, salario) 
-VALUES (&apos;63392999176&apos;, STR_TO_DATE(&apos;21-06-2018&apos;, &apos;%d-%m-%Y&apos;), true, 1128.08);
+VALUES ('63392999176', STR_TO_DATE('21-06-2018', '%d-%m-%Y'), true, 1128.08);
 
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;segunda de manha&apos;, &apos;07:00&apos;, &apos;12:00&apos;, &apos;SEG&apos;);
+VALUES ('segunda de manha', '07:00', '12:00', 'SEG');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;segunda de tarde&apos;, &apos;13:00&apos;, &apos;18:00&apos;, &apos;SEG&apos;);
+VALUES ('segunda de tarde', '13:00', '18:00', 'SEG');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;segunda de noite&apos;, &apos;19:00&apos;, &apos;00:00&apos;, &apos;SEG&apos;);
+VALUES ('segunda de noite', '19:00', '00:00', 'SEG');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;segunda de madrugada&apos;, &apos;01:00&apos;, &apos;06:00&apos;, &apos;SEG&apos;);
+VALUES ('segunda de madrugada', '01:00', '06:00', 'SEG');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;ter&#xE7;a de manha&apos;, &apos;07:00&apos;, &apos;12:00&apos;, &apos;TER&apos;);
+VALUES ('terça de manha', '07:00', '12:00', 'TER');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;ter&#xE7;a de tarde&apos;, &apos;13:00&apos;, &apos;18:00&apos;, &apos;TER&apos;);
+VALUES ('terça de tarde', '13:00', '18:00', 'TER');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;ter&#xE7;a de noite&apos;, &apos;19:00&apos;, &apos;00:00&apos;, &apos;TER&apos;);
+VALUES ('terça de noite', '19:00', '00:00', 'TER');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;ter&#xE7;a de madrugada&apos;, &apos;01:00&apos;, &apos;06:00&apos;, &apos;TER&apos;);
+VALUES ('terça de madrugada', '01:00', '06:00', 'TER');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;quarta de manha&apos;, &apos;07:00&apos;, &apos;12:00&apos;, &apos;QUA&apos;);
+VALUES ('quarta de manha', '07:00', '12:00', 'QUA');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;quarta de tarde&apos;, &apos;13:00&apos;, &apos;18:00&apos;, &apos;QUA&apos;);
+VALUES ('quarta de tarde', '13:00', '18:00', 'QUA');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;quarta de noite&apos;, &apos;19:00&apos;, &apos;00:00&apos;, &apos;QUA&apos;);
+VALUES ('quarta de noite', '19:00', '00:00', 'QUA');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;quarta de madrugada&apos;, &apos;01:00&apos;, &apos;06:00&apos;, &apos;QUA&apos;);
+VALUES ('quarta de madrugada', '01:00', '06:00', 'QUA');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;quinta de manha&apos;, &apos;07:00&apos;, &apos;12:00&apos;, &apos;QUI&apos;);
+VALUES ('quinta de manha', '07:00', '12:00', 'QUI');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;quinta de tarde&apos;, &apos;13:00&apos;, &apos;18:00&apos;, &apos;QUI&apos;);
+VALUES ('quinta de tarde', '13:00', '18:00', 'QUI');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;quinta de noite&apos;, &apos;19:00&apos;, &apos;00:00&apos;, &apos;QUI&apos;);
+VALUES ('quinta de noite', '19:00', '00:00', 'QUI');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;quinta de madrugada&apos;, &apos;01:00&apos;, &apos;06:00&apos;, &apos;QUI&apos;);
+VALUES ('quinta de madrugada', '01:00', '06:00', 'QUI');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;sexta de manha&apos;, &apos;07:00&apos;, &apos;12:00&apos;, &apos;SEX&apos;);
+VALUES ('sexta de manha', '07:00', '12:00', 'SEX');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;sexta de tarde&apos;, &apos;13:00&apos;, &apos;18:00&apos;, &apos;SEX&apos;);
+VALUES ('sexta de tarde', '13:00', '18:00', 'SEX');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;sexta de noite&apos;, &apos;19:00&apos;, &apos;00:00&apos;, &apos;SEX&apos;);
+VALUES ('sexta de noite', '19:00', '00:00', 'SEX');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;sabado de madrugada&apos;, &apos;01:00&apos;, &apos;06:00&apos;, &apos;SAB&apos;);
+VALUES ('sabado de madrugada', '01:00', '06:00', 'SAB');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;sabado de manha&apos;, &apos;07:00&apos;, &apos;12:00&apos;, &apos;SAB&apos;);
+VALUES ('sabado de manha', '07:00', '12:00', 'SAB');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;sabado de tarde&apos;, &apos;13:00&apos;, &apos;18:00&apos;, &apos;SAB&apos;);
+VALUES ('sabado de tarde', '13:00', '18:00', 'SAB');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;sabado de noite&apos;, &apos;19:00&apos;, &apos;00:00&apos;, &apos;SAB&apos;);
+VALUES ('sabado de noite', '19:00', '00:00', 'SAB');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;sabado de madrugada&apos;, &apos;01:00&apos;, &apos;06:00&apos;, &apos;SAB&apos;);
+VALUES ('sabado de madrugada', '01:00', '06:00', 'SAB');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;domingo de manha&apos;, &apos;07:00&apos;, &apos;12:00&apos;, &apos;DOM&apos;);
+VALUES ('domingo de manha', '07:00', '12:00', 'DOM');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;domingo de tarde&apos;, &apos;13:00&apos;, &apos;18:00&apos;, &apos;DOM&apos;);
+VALUES ('domingo de tarde', '13:00', '18:00', 'DOM');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;domingo de noite&apos;, &apos;19:00&apos;, &apos;00:00&apos;, &apos;DOM&apos;);
+VALUES ('domingo de noite', '19:00', '00:00', 'DOM');
 INSERT INTO HORARIO (descricao, hr_inicial, hr_final, dia_semana) 
-VALUES (&apos;domingo de madrugada&apos;, &apos;01:00&apos;, &apos;06:00&apos;, &apos;DOM&apos;);
+VALUES ('domingo de madrugada', '01:00', '06:00', 'DOM');
 
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;85037528581&apos;, 2);
+VALUES ('85037528581', 2);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;85037528581&apos;, 8);
+VALUES ('85037528581', 8);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;85037528581&apos;, 11);
+VALUES ('85037528581', 11);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;80589385421&apos;, 3);
+VALUES ('80589385421', 3);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;80589385421&apos;, 7);
+VALUES ('80589385421', 7);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;80589385421&apos;, 1);
+VALUES ('80589385421', 1);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;99876173243&apos;, 9);
+VALUES ('99876173243', 9);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;99876173243&apos;, 4);
+VALUES ('99876173243', 4);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;81084725304&apos;, 3);
+VALUES ('81084725304', 3);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;81084725304&apos;, 8);
+VALUES ('81084725304', 8);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;81084725304&apos;, 28);
+VALUES ('81084725304', 28);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;39488553863&apos;, 17);
+VALUES ('39488553863', 17);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;39488553863&apos;, 22);
+VALUES ('39488553863', 22);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;12567794423&apos;, 20);
+VALUES ('12567794423', 20);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;45389849597&apos;, 18);
+VALUES ('45389849597', 18);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;45389849597&apos;, 3);
+VALUES ('45389849597', 3);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;45389849597&apos;, 21);
+VALUES ('45389849597', 21);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;83155702995&apos;, 13); 
+VALUES ('83155702995', 13); 
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;83155702995&apos;, 23);
+VALUES ('83155702995', 23);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;83155702995&apos;, 9);
+VALUES ('83155702995', 9);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;83155702995&apos;, 19);
+VALUES ('83155702995', 19);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;39755566639&apos;, 25);
+VALUES ('39755566639', 25);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;39755566639&apos;, 23);
+VALUES ('39755566639', 23);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;39755566639&apos;, 1);
+VALUES ('39755566639', 1);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;52695183996&apos;, 8);
+VALUES ('52695183996', 8);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;52695183996&apos;, 2);
+VALUES ('52695183996', 2);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;52695183996&apos;, 4);
+VALUES ('52695183996', 4);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;52695183996&apos;, 5);
+VALUES ('52695183996', 5);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;86468766606&apos;, 19);
+VALUES ('86468766606', 19);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;86468766606&apos;, 26);
+VALUES ('86468766606', 26);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;86468766606&apos;, 22);
+VALUES ('86468766606', 22);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;86468766606&apos;, 9);
+VALUES ('86468766606', 9);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;33781338876&apos;, 2);
+VALUES ('33781338876', 2);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;33781338876&apos;, 1);
+VALUES ('33781338876', 1);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;33781338876&apos;, 3);
+VALUES ('33781338876', 3);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;33781338876&apos;, 20);
+VALUES ('33781338876', 20);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;33781338876&apos;, 25);
+VALUES ('33781338876', 25);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;33781338876&apos;, 28);
+VALUES ('33781338876', 28);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;33781338876&apos;, 10);
+VALUES ('33781338876', 10);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;33781338876&apos;, 11);
+VALUES ('33781338876', 11);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;63838702267&apos;, 1);
+VALUES ('63838702267', 1);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;63838702267&apos;, 8);
+VALUES ('63838702267', 8);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;63838702267&apos;, 23);
+VALUES ('63838702267', 23);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;63392999176&apos;, 4);
+VALUES ('63392999176', 4);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;63392999176&apos;, 13);
+VALUES ('63392999176', 13);
 INSERT INTO TRABALHA_EM (cpf, cod) 
-VALUES (&apos;63392999176&apos;, 26);
+VALUES ('63392999176', 26);
 
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (12, 1, 2, &apos;83155702995&apos;);
+VALUES (12, 1, 2, '83155702995');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (13, 1, 2, &apos;83155702995&apos;);
+VALUES (13, 1, 2, '83155702995');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (16, 1, 2, &apos;83155702995&apos;);
+VALUES (16, 1, 2, '83155702995');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (18, 1, 2, &apos;83155702995&apos;);
+VALUES (18, 1, 2, '83155702995');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (21, 2, 5, &apos;39755566639&apos;);
+VALUES (21, 2, 5, '39755566639');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (22, 2, 5, &apos;39755566639&apos;);
+VALUES (22, 2, 5, '39755566639');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (23, 2, 0, &apos;39755566639&apos;);
+VALUES (23, 2, 0, '39755566639');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (33, 3, 10, &apos;39755566639&apos;);
+VALUES (33, 3, 10, '39755566639');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (36, 3, 10, &apos;52695183996&apos;);
+VALUES (36, 3, 10, '52695183996');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (44, 4, 3, &apos;52695183996&apos;);
+VALUES (44, 4, 3, '52695183996');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (45, 4, 3, &apos;52695183996&apos;);
+VALUES (45, 4, 3, '52695183996');
 INSERT INTO SALA (numero, andar, num_leitos, enf_gerente)
-VALUES (46, 4, 3, &apos;52695183996&apos;);
+VALUES (46, 4, 3, '52695183996');
 
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;DOR_DE_CABECA&apos;, &apos;BAIXA&apos;);
+VALUES ('DOR_DE_CABECA', 'BAIXA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;DOR_NO_CORPO&apos;, &apos;BAIXA&apos;);
+VALUES ('DOR_NO_CORPO', 'BAIXA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;FEBRE_BAIXA&apos;, &apos;MEDIA&apos;);
+VALUES ('FEBRE_BAIXA', 'MEDIA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;FEBRE_ALTA&apos;, &apos;ALTA&apos;);
+VALUES ('FEBRE_ALTA', 'ALTA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;TRAUMATISMO&apos;, &apos;MUITO_ALTA&apos;);
+VALUES ('TRAUMATISMO', 'MUITO_ALTA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;LESAO_POR_ESFORCO_REPETITIVO&apos;, &apos;MEDIA&apos;);
+VALUES ('LESAO_POR_ESFORCO_REPETITIVO', 'MEDIA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;DOR_DE_ESTOMAGO&apos;, &apos;BAIXA&apos;);
+VALUES ('DOR_DE_ESTOMAGO', 'BAIXA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;NAUSEA&apos;, &apos;BAIXA&apos;);
+VALUES ('NAUSEA', 'BAIXA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;VOMITO&apos;, &apos;MEDIA&apos;);
+VALUES ('VOMITO', 'MEDIA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;ALERGIA&apos;, &apos;MEDIA&apos;);
+VALUES ('ALERGIA', 'MEDIA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;HEMORRAGIA&apos;, &apos;ALTA&apos;);
+VALUES ('HEMORRAGIA', 'ALTA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;HEMORRAGIA_INTERNA&apos;, &apos;MUITO_ALTA&apos;);
+VALUES ('HEMORRAGIA_INTERNA', 'MUITO_ALTA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;HEMATOMA&apos;, &apos;ALTA&apos;);
+VALUES ('HEMATOMA', 'ALTA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;FRATURA&apos;, &apos;MUITO_ALTA&apos;);
+VALUES ('FRATURA', 'MUITO_ALTA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;ERUPCOES&apos;, &apos;MUITO_ALTA&apos;);
+VALUES ('ERUPCOES', 'MUITO_ALTA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;DOR_LOMBAR&apos;, &apos;MEDIA&apos;);
+VALUES ('DOR_LOMBAR', 'MEDIA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;TONTURA&apos;, &apos;MEDIA&apos;);
+VALUES ('TONTURA', 'MEDIA');
 INSERT INTO SINTOMA (descricao, gravidade)
-VALUES (&apos;MAL_ESTAR_GERAL&apos;, &apos;MEDIA&apos;);
+VALUES ('MAL_ESTAR_GERAL', 'MEDIA');
 
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES (&apos;95824797675&apos;, 21, &apos;2018-06-19 09:07:21&apos;, &apos;2018-06-20 18:17:01&apos;, &apos;Suspeita de dengue&apos;);
+VALUES ('95824797675', 21, '2018-06-19 09:07:21', '2018-06-20 18:17:01', 'Suspeita de dengue');
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES (&apos;68979553587&apos;, 36, &apos;2018-06-01 13:37:41&apos;, &apos;2018-06-03 21:58:00&apos;, &apos;Acidente de tr&#xE2;nsito&apos;);
+VALUES ('68979553587', 36, '2018-06-01 13:37:41', '2018-06-03 21:58:00', 'Acidente de trânsito');
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES (&apos;48334591197&apos;, 22, &apos;2018-06-29 08:41:23&apos;, &apos;2018-07-03 11:00:28&apos;, &apos;Alergia a ovo&apos;);
+VALUES ('48334591197', 22, '2018-06-29 08:41:23', '2018-07-03 11:00:28', 'Alergia a ovo');
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES (&apos;75369310658&apos;, 45, &apos;2018-06-29 21:12:47&apos;, &apos;2018-07-02 12:56:41&apos;, null);
+VALUES ('75369310658', 45, '2018-06-29 21:12:47', '2018-07-02 12:56:41', null);
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES (&apos;95824797675&apos;, 12, &apos;2018-06-30 21:15:31&apos;, null, null);
+VALUES ('95824797675', 12, '2018-06-30 21:15:31', null, null);
 INSERT INTO INTERNACAO (cpf_pct, num_sala, dt_intern, dt_alta, motivo)
-VALUES (&apos;63838702267&apos;, 12, &apos;2018-06-30 18:30:58&apos;, null, null);
+VALUES ('63838702267', 12, '2018-06-30 18:30:58', null, null);
 
 INSERT INTO FICHA_PCT (cpf_pct, dt_triagem, obs, peso_pct, altura_pct, cpf_enf) 
-VALUES (&apos;95824797675&apos;, &apos;2018-06-19 07:21:13&apos;, null, 32.614, 1.488, &apos;39755566639&apos;);
+VALUES ('95824797675', '2018-06-19 07:21:13', null, 32.614, 1.488, '39755566639');
 INSERT INTO FICHA_PCT (cpf_pct, dt_triagem, obs, peso_pct, altura_pct, cpf_enf) 
-VALUES (&apos;68979553587&apos;, &apos;2018-06-01 13:29:07&apos;, &apos;URGENTE: FRATURA EXPOSTA / GESTANTE&apos;, 70.522, 1.58, &apos;52695183996&apos;);
+VALUES ('68979553587', '2018-06-01 13:29:07', 'URGENTE: FRATURA EXPOSTA / GESTANTE', 70.522, 1.58, '52695183996');
 INSERT INTO FICHA_PCT (cpf_pct, dt_triagem, obs, peso_pct, altura_pct, cpf_enf) 
-VALUES (&apos;48334591197&apos;, &apos;2018-06-29 07:20:47&apos;, null, 24.502, 1.125, &apos;83155702995&apos;);
+VALUES ('48334591197', '2018-06-29 07:20:47', null, 24.502, 1.125, '83155702995');
 INSERT INTO FICHA_PCT (cpf_pct, dt_triagem, obs, peso_pct, altura_pct, cpf_enf) 
-VALUES (&apos;75369310658&apos;, &apos;2018-06-29 19:21:54&apos;, null, 81.558, 1.834, &apos;83155702995&apos;);
+VALUES ('75369310658', '2018-06-29 19:21:54', null, 81.558, 1.834, '83155702995');
 INSERT INTO FICHA_PCT (cpf_pct, dt_triagem, obs, peso_pct, altura_pct, cpf_enf) 
-VALUES (&apos;95824797675&apos;, &apos;2018-06-30 20:47:06&apos;, null, 30.987, 1.488, &apos;52695183996&apos;);
+VALUES ('95824797675', '2018-06-30 20:47:06', null, 30.987, 1.488, '52695183996');
 INSERT INTO FICHA_PCT (cpf_pct, dt_triagem, obs, peso_pct, altura_pct, cpf_enf) 
-VALUES (&apos;63838702267&apos;, &apos;2018-06-30 18:02:08&apos;, &apos;GESTANTE&apos;, 62.857, 1.704, &apos;86468766606&apos;);
+VALUES ('63838702267', '2018-06-30 18:02:08', 'GESTANTE', 62.857, 1.704, '86468766606');
 
 INSERT INTO CONSULTA 
-VALUES (&apos;80589385421&apos;, &apos;95824797675&apos;, &apos;2018-06-19 08:54:53&apos;, null, &apos;2018-06-19 07:21:13&apos;);
+VALUES ('80589385421', '95824797675', '2018-06-19 08:54:53', null, '2018-06-19 07:21:13');
 INSERT INTO CONSULTA 
-VALUES (&apos;45389849597&apos;, &apos;68979553587&apos;, &apos;2018-06-01 13:34:22&apos;, null, &apos;2018-06-01 13:29:07&apos;);
+VALUES ('45389849597', '68979553587', '2018-06-01 13:34:22', null, '2018-06-01 13:29:07');
 INSERT INTO CONSULTA 
-VALUES (&apos;81084725304&apos;, &apos;48334591197&apos;, &apos;2018-06-29 08:30:05&apos;, null, &apos;2018-06-29 07:20:47&apos;);
+VALUES ('81084725304', '48334591197', '2018-06-29 08:30:05', null, '2018-06-29 07:20:47');
 INSERT INTO CONSULTA 
-VALUES (&apos;12567794423&apos;, &apos;75369310658&apos;, &apos;2018-06-29 18:58:24&apos;, null, &apos;2018-06-29 19:21:54&apos;);
+VALUES ('12567794423', '75369310658', '2018-06-29 18:58:24', null, '2018-06-29 19:21:54');
 INSERT INTO CONSULTA 
-VALUES (&apos;80589385421&apos;, &apos;95824797675&apos;, &apos;2018-06-30 20:58:47&apos;, &apos;2018-06-19 08:54:53&apos;, &apos;2018-06-30 20:47:06&apos;);
+VALUES ('80589385421', '95824797675', '2018-06-30 20:58:47', '2018-06-19 08:54:53', '2018-06-30 20:47:06');
 INSERT INTO CONSULTA 
-VALUES (&apos;99876173243&apos;, &apos;63838702267&apos;, &apos;2018-06-30 18:17:27&apos;, null, &apos;2018-06-30 18:02:08&apos;);
+VALUES ('99876173243', '63838702267', '2018-06-30 18:17:27', null, '2018-06-30 18:02:08');
 
 INSERT INTO ENCAMINHAMENTO
-VALUES (null, &apos;Sinais de miopia se desenvolvendo&apos;, &apos;Encaminhar para o Dr. Joseph Iyonovic no Hospital X.&apos;, &apos;2018-07-30&apos;, &apos;12567794423&apos;, &apos;75369310658&apos;, &apos;2018-06-29 18:58:24&apos;);
+VALUES (null, 'Sinais de miopia se desenvolvendo', 'Encaminhar para o Dr. Joseph Iyonovic no Hospital X.', '2018-07-30', '12567794423', '75369310658', '2018-06-29 18:58:24');
 
-INSERT INTO SINTOMA_PCT VALUES (2, &apos;63838702267&apos;, &apos;2018-06-30 18:02:08&apos;);
-INSERT INTO SINTOMA_PCT VALUES (9, &apos;63838702267&apos;, &apos;2018-06-30 18:02:08&apos;);
-INSERT INTO SINTOMA_PCT VALUES (17, &apos;63838702267&apos;, &apos;2018-06-30 18:02:08&apos;);
+INSERT INTO SINTOMA_PCT VALUES (2, '63838702267', '2018-06-30 18:02:08');
+INSERT INTO SINTOMA_PCT VALUES (9, '63838702267', '2018-06-30 18:02:08');
+INSERT INTO SINTOMA_PCT VALUES (17, '63838702267', '2018-06-30 18:02:08');
 --
-INSERT INTO SINTOMA_PCT VALUES (12, &apos;95824797675&apos;, &apos;2018-06-30 20:47:06&apos;);
-INSERT INTO SINTOMA_PCT VALUES (15, &apos;95824797675&apos;, &apos;2018-06-30 20:47:06&apos;);
-INSERT INTO SINTOMA_PCT VALUES (9, &apos;95824797675&apos;, &apos;2018-06-30 20:47:06&apos;);
-INSERT INTO SINTOMA_PCT VALUES (4, &apos;95824797675&apos;, &apos;2018-06-30 20:47:06&apos;);
-INSERT INTO SINTOMA_PCT VALUES (18, &apos;95824797675&apos;, &apos;2018-06-30 20:47:06&apos;);
+INSERT INTO SINTOMA_PCT VALUES (12, '95824797675', '2018-06-30 20:47:06');
+INSERT INTO SINTOMA_PCT VALUES (15, '95824797675', '2018-06-30 20:47:06');
+INSERT INTO SINTOMA_PCT VALUES (9, '95824797675', '2018-06-30 20:47:06');
+INSERT INTO SINTOMA_PCT VALUES (4, '95824797675', '2018-06-30 20:47:06');
+INSERT INTO SINTOMA_PCT VALUES (18, '95824797675', '2018-06-30 20:47:06');
 --
-INSERT INTO SINTOMA_PCT VALUES (8, &apos;75369310658&apos;, &apos;2018-06-29 19:21:54&apos;);
-INSERT INTO SINTOMA_PCT VALUES (1, &apos;75369310658&apos;, &apos;2018-06-29 19:21:54&apos;);
-INSERT INTO SINTOMA_PCT VALUES (17, &apos;75369310658&apos;, &apos;2018-06-29 19:21:54&apos;);
-INSERT INTO SINTOMA_PCT VALUES (3, &apos;75369310658&apos;, &apos;2018-06-29 19:21:54&apos;);
+INSERT INTO SINTOMA_PCT VALUES (8, '75369310658', '2018-06-29 19:21:54');
+INSERT INTO SINTOMA_PCT VALUES (1, '75369310658', '2018-06-29 19:21:54');
+INSERT INTO SINTOMA_PCT VALUES (17, '75369310658', '2018-06-29 19:21:54');
+INSERT INTO SINTOMA_PCT VALUES (3, '75369310658', '2018-06-29 19:21:54');
 --
-INSERT INTO SINTOMA_PCT VALUES (1, &apos;95824797675&apos;, &apos;2018-06-19 07:21:13&apos;);
-INSERT INTO SINTOMA_PCT VALUES (18, &apos;95824797675&apos;, &apos;2018-06-19 07:21:13&apos;);
-INSERT INTO SINTOMA_PCT VALUES (9, &apos;95824797675&apos;, &apos;2018-06-19 07:21:13&apos;);
-INSERT INTO SINTOMA_PCT VALUES (4, &apos;95824797675&apos;, &apos;2018-06-19 07:21:13&apos;);
-INSERT INTO SINTOMA_PCT VALUES (16, &apos;95824797675&apos;, &apos;2018-06-19 07:21:13&apos;);
-INSERT INTO SINTOMA_PCT VALUES (7, &apos;95824797675&apos;, &apos;2018-06-19 07:21:13&apos;);
-INSERT INTO SINTOMA_PCT VALUES (2, &apos;95824797675&apos;, &apos;2018-06-19 07:21:13&apos;);
+INSERT INTO SINTOMA_PCT VALUES (1, '95824797675', '2018-06-19 07:21:13');
+INSERT INTO SINTOMA_PCT VALUES (18, '95824797675', '2018-06-19 07:21:13');
+INSERT INTO SINTOMA_PCT VALUES (9, '95824797675', '2018-06-19 07:21:13');
+INSERT INTO SINTOMA_PCT VALUES (4, '95824797675', '2018-06-19 07:21:13');
+INSERT INTO SINTOMA_PCT VALUES (16, '95824797675', '2018-06-19 07:21:13');
+INSERT INTO SINTOMA_PCT VALUES (7, '95824797675', '2018-06-19 07:21:13');
+INSERT INTO SINTOMA_PCT VALUES (2, '95824797675', '2018-06-19 07:21:13');
 --
-INSERT INTO SINTOMA_PCT VALUES (14, &apos;68979553587&apos;, &apos;2018-06-01 13:29:07&apos;);
-INSERT INTO SINTOMA_PCT VALUES (11, &apos;68979553587&apos;, &apos;2018-06-01 13:29:07&apos;);
-INSERT INTO SINTOMA_PCT VALUES (12, &apos;68979553587&apos;, &apos;2018-06-01 13:29:07&apos;);
-INSERT INTO SINTOMA_PCT VALUES (5, &apos;68979553587&apos;, &apos;2018-06-01 13:29:07&apos;);
+INSERT INTO SINTOMA_PCT VALUES (14, '68979553587', '2018-06-01 13:29:07');
+INSERT INTO SINTOMA_PCT VALUES (11, '68979553587', '2018-06-01 13:29:07');
+INSERT INTO SINTOMA_PCT VALUES (12, '68979553587', '2018-06-01 13:29:07');
+INSERT INTO SINTOMA_PCT VALUES (5, '68979553587', '2018-06-01 13:29:07');
 --
-INSERT INTO SINTOMA_PCT VALUES (3, &apos;48334591197&apos;, &apos;2018-06-29 07:20:47&apos;);
-INSERT INTO SINTOMA_PCT VALUES (18, &apos;48334591197&apos;, &apos;2018-06-29 07:20:47&apos;);
-INSERT INTO SINTOMA_PCT VALUES (15, &apos;48334591197&apos;, &apos;2018-06-29 07:20:47&apos;);
-INSERT INTO SINTOMA_PCT VALUES (10, &apos;48334591197&apos;, &apos;2018-06-29 07:20:47&apos;);
+INSERT INTO SINTOMA_PCT VALUES (3, '48334591197', '2018-06-29 07:20:47');
+INSERT INTO SINTOMA_PCT VALUES (18, '48334591197', '2018-06-29 07:20:47');
+INSERT INTO SINTOMA_PCT VALUES (15, '48334591197', '2018-06-29 07:20:47');
+INSERT INTO SINTOMA_PCT VALUES (10, '48334591197', '2018-06-29 07:20:47');
 --
 
-INSERT MEDICAMENTO VALUES (null, &apos;DIPIRONA_GENERICA&apos;, 9.99, true);
-INSERT MEDICAMENTO VALUES (null, &apos;DIPIRONA&apos;, 22.99, false);
-INSERT MEDICAMENTO VALUES (null, &apos;DORFLEX&apos;, 34.99, false);
-INSERT MEDICAMENTO VALUES (null, &apos;DRAMIN&apos;, 21.99, false);
-INSERT MEDICAMENTO VALUES (null, &apos;DRAMIN_GENERICO&apos;, 8.99, true);
-INSERT MEDICAMENTO VALUES (null, &apos;ADIVIL&apos;, 1.99, true);
-INSERT MEDICAMENTO VALUES (null, &apos;HISTAMIN&apos;, 14.99, false);
-INSERT MEDICAMENTO VALUES (null, &apos;HISTAMIN_GENERICO&apos;, 5.99, true);
-INSERT MEDICAMENTO VALUES (null, &apos;NEOPIRIDIN&apos;, 19.99, true);
-INSERT MEDICAMENTO VALUES (null, &apos;BEZOTACIL&apos;, 0, true);
-INSERT MEDICAMENTO VALUES (null, &apos;BUSCOPAN&apos;, 12.45, false);
-INSERT MEDICAMENTO VALUES (null, &apos;OMEPRAZOL&apos;, 35.21, false);
+INSERT MEDICAMENTO VALUES (null, 'DIPIRONA_GENERICA', 9.99, true);
+INSERT MEDICAMENTO VALUES (null, 'DIPIRONA', 22.99, false);
+INSERT MEDICAMENTO VALUES (null, 'DORFLEX', 34.99, false);
+INSERT MEDICAMENTO VALUES (null, 'DRAMIN', 21.99, false);
+INSERT MEDICAMENTO VALUES (null, 'DRAMIN_GENERICO', 8.99, true);
+INSERT MEDICAMENTO VALUES (null, 'ADIVIL', 1.99, true);
+INSERT MEDICAMENTO VALUES (null, 'HISTAMIN', 14.99, false);
+INSERT MEDICAMENTO VALUES (null, 'HISTAMIN_GENERICO', 5.99, true);
+INSERT MEDICAMENTO VALUES (null, 'NEOPIRIDIN', 19.99, true);
+INSERT MEDICAMENTO VALUES (null, 'BEZOTACIL', 0, true);
+INSERT MEDICAMENTO VALUES (null, 'BUSCOPAN', 12.45, false);
+INSERT MEDICAMENTO VALUES (null, 'OMEPRAZOL', 35.21, false);
 
 INSERT INTO RECEITA
-VALUES (4, &apos;81084725304&apos;, &apos;48334591197&apos;, &apos;2018-06-29 08:30:05&apos;, &apos;2018-07-08&apos;, &apos;Em caso de vomito constante&apos;);
+VALUES (4, '81084725304', '48334591197', '2018-06-29 08:30:05', '2018-07-08', 'Em caso de vomito constante');
 INSERT INTO RECEITA
-VALUES (8, &apos;81084725304&apos;, &apos;48334591197&apos;, &apos;2018-06-29 08:30:05&apos;, &apos;2018-07-08&apos;, null);
+VALUES (8, '81084725304', '48334591197', '2018-06-29 08:30:05', '2018-07-08', null);
 INSERT INTO RECEITA
-VALUES (2, &apos;12567794423&apos;, &apos;75369310658&apos;, &apos;2018-06-29 18:58:24&apos;, &apos;2018-07-08&apos;, null);
+VALUES (2, '12567794423', '75369310658', '2018-06-29 18:58:24', '2018-07-08', null);
 INSERT INTO RECEITA
-VALUES (6, &apos;12567794423&apos;, &apos;75369310658&apos;, &apos;2018-06-29 18:58:24&apos;, &apos;2018-07-08&apos;, &apos;Durante pelo menos 2 dias&apos;);
+VALUES (6, '12567794423', '75369310658', '2018-06-29 18:58:24', '2018-07-08', 'Durante pelo menos 2 dias');
 INSERT INTO RECEITA
-VALUES (3, &apos;12567794423&apos;, &apos;75369310658&apos;, &apos;2018-06-29 18:58:24&apos;, &apos;2018-07-08&apos;, null);
+VALUES (3, '12567794423', '75369310658', '2018-06-29 18:58:24', '2018-07-08', null);
 INSERT INTO RECEITA
-VALUES (4, &apos;12567794423&apos;, &apos;75369310658&apos;, &apos;2018-06-29 18:58:24&apos;, &apos;2018-07-08&apos;, &apos;Apenas em caso de vomito&apos;);
+VALUES (4, '12567794423', '75369310658', '2018-06-29 18:58:24', '2018-07-08', 'Apenas em caso de vomito');
 
-INSERT COMBATE_SINTOMA VALUES (1, 1, &apos;6 EM 6 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (1, 2, &apos;8 EM 8 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (1, 18, &apos;8 EM 8 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (1, 17, &apos;8 EM 8 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (1, 16, &apos;8 EM 8 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (2, 1, &apos;4 EM 4 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (2, 2, &apos;6 EM 6 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (2, 18, &apos;6 EM 6 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (2, 17, &apos;6 EM 6 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (2, 16, &apos;6 EM 6 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (3, 1, &apos;3 EM 3 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (3, 2, &apos;3 EM 3 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (3, 18, &apos;3 EM 3 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (3, 16, &apos;3 EM 3 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (3, 13, &apos;3 EM 3 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (1, 1, '6 EM 6 HORAS');
+INSERT COMBATE_SINTOMA VALUES (1, 2, '8 EM 8 HORAS');
+INSERT COMBATE_SINTOMA VALUES (1, 18, '8 EM 8 HORAS');
+INSERT COMBATE_SINTOMA VALUES (1, 17, '8 EM 8 HORAS');
+INSERT COMBATE_SINTOMA VALUES (1, 16, '8 EM 8 HORAS');
+INSERT COMBATE_SINTOMA VALUES (2, 1, '4 EM 4 HORAS');
+INSERT COMBATE_SINTOMA VALUES (2, 2, '6 EM 6 HORAS');
+INSERT COMBATE_SINTOMA VALUES (2, 18, '6 EM 6 HORAS');
+INSERT COMBATE_SINTOMA VALUES (2, 17, '6 EM 6 HORAS');
+INSERT COMBATE_SINTOMA VALUES (2, 16, '6 EM 6 HORAS');
+INSERT COMBATE_SINTOMA VALUES (3, 1, '3 EM 3 HORAS');
+INSERT COMBATE_SINTOMA VALUES (3, 2, '3 EM 3 HORAS');
+INSERT COMBATE_SINTOMA VALUES (3, 18, '3 EM 3 HORAS');
+INSERT COMBATE_SINTOMA VALUES (3, 16, '3 EM 3 HORAS');
+INSERT COMBATE_SINTOMA VALUES (3, 13, '3 EM 3 HORAS');
 --
-INSERT COMBATE_SINTOMA VALUES (4, 8, &apos;2 EM 2 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (4, 9, &apos;2 EM 2 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (5, 8, &apos;2 EM 2 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (5, 9, &apos;3 EM 3 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (4, 8, '2 EM 2 HORAS');
+INSERT COMBATE_SINTOMA VALUES (4, 9, '2 EM 2 HORAS');
+INSERT COMBATE_SINTOMA VALUES (5, 8, '2 EM 2 HORAS');
+INSERT COMBATE_SINTOMA VALUES (5, 9, '3 EM 3 HORAS');
 --
-INSERT COMBATE_SINTOMA VALUES (6, 18, &apos;5 EM 5 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (6, 6, &apos;6 EM 6 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (6, 2, &apos;3 EM 3 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (6, 3, &apos;6 EM 6 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (6, 18, '5 EM 5 HORAS');
+INSERT COMBATE_SINTOMA VALUES (6, 6, '6 EM 6 HORAS');
+INSERT COMBATE_SINTOMA VALUES (6, 2, '3 EM 3 HORAS');
+INSERT COMBATE_SINTOMA VALUES (6, 3, '6 EM 6 HORAS');
 --
-INSERT COMBATE_SINTOMA VALUES (7, 10, &apos;6 EM 6 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (7, 10, '6 EM 6 HORAS');
 --
-INSERT COMBATE_SINTOMA VALUES (8, 10, &apos;8 EM 8 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (8, 10, '8 EM 8 HORAS');
 --
-INSERT COMBATE_SINTOMA VALUES (9, 10, &apos;4 EM 4 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (9, 10, '4 EM 4 HORAS');
 --
-INSERT COMBATE_SINTOMA VALUES (10, 4, &apos;24 EM 24 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (10, 18, &apos;24 EM 24 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (10, 17, &apos;24 EM 24 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (10, 1, &apos;24 EM 24 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (10, 9, &apos;24 EM 24 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (10, 2, &apos;24 EM 24 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (10, 7, &apos;24 EM 24 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (10, 4, '24 EM 24 HORAS');
+INSERT COMBATE_SINTOMA VALUES (10, 18, '24 EM 24 HORAS');
+INSERT COMBATE_SINTOMA VALUES (10, 17, '24 EM 24 HORAS');
+INSERT COMBATE_SINTOMA VALUES (10, 1, '24 EM 24 HORAS');
+INSERT COMBATE_SINTOMA VALUES (10, 9, '24 EM 24 HORAS');
+INSERT COMBATE_SINTOMA VALUES (10, 2, '24 EM 24 HORAS');
+INSERT COMBATE_SINTOMA VALUES (10, 7, '24 EM 24 HORAS');
 --
-INSERT COMBATE_SINTOMA VALUES (11, 18, &apos;8 EM 8 HORAS&apos;);
-INSERT COMBATE_SINTOMA VALUES (11, 7, &apos;8 EM 8 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (11, 18, '8 EM 8 HORAS');
+INSERT COMBATE_SINTOMA VALUES (11, 7, '8 EM 8 HORAS');
 --
-INSERT COMBATE_SINTOMA VALUES (12, 7, &apos;12 EM 12 HORAS&apos;);
+INSERT COMBATE_SINTOMA VALUES (12, 7, '12 EM 12 HORAS');
 
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;PEDIATRIA&apos;);
+VALUES (null, 'PEDIATRIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;CLINICO_GERAL&apos;);
+VALUES (null, 'CLINICO_GERAL');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;ORTOPEDIA&apos;);
+VALUES (null, 'ORTOPEDIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;GINECOLOGIA&apos;);
+VALUES (null, 'GINECOLOGIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (4, &apos;OBSTETRICIA&apos;);
+VALUES (4, 'OBSTETRICIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;NEUROLOGIA&apos;);
+VALUES (null, 'NEUROLOGIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (6, &apos;NEURO_CIRURGIA&apos;);
+VALUES (6, 'NEURO_CIRURGIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (3, &apos;FISIO_TERAPIA&apos;);
+VALUES (3, 'FISIO_TERAPIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;OTORRINOFARINGOLOGIA&apos;);
+VALUES (null, 'OTORRINOFARINGOLOGIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;ENDOCRINOLOGIA&apos;);
+VALUES (null, 'ENDOCRINOLOGIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;GASTROENTEROLOGIA&apos;);
+VALUES (null, 'GASTROENTEROLOGIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;ONCOLOGIA&apos;);
+VALUES (null, 'ONCOLOGIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (12, &apos;MASTOLOGIA&apos;);
+VALUES (12, 'MASTOLOGIA');
 INSERT INTO AREA_ATUACAO (cod_macro_area, descricao) 
-VALUES (null, &apos;OFTALMOLOGIA&apos;);
+VALUES (null, 'OFTALMOLOGIA');
 
-INSERT INTO FORMADO_EM VALUES (7, &apos;45389849597&apos;);
-INSERT INTO FORMADO_EM VALUES (6, &apos;45389849597&apos;);
-INSERT INTO FORMADO_EM VALUES (2, &apos;45389849597&apos;);
-INSERT INTO FORMADO_EM VALUES (2, &apos;12567794423&apos;);
-INSERT INTO FORMADO_EM VALUES (3, &apos;12567794423&apos;);
-INSERT INTO FORMADO_EM VALUES (2, &apos;39488553863&apos;);
-INSERT INTO FORMADO_EM VALUES (5, &apos;39488553863&apos;);
-INSERT INTO FORMADO_EM VALUES (4, &apos;39488553863&apos;);
-INSERT INTO FORMADO_EM VALUES (2, &apos;80589385421&apos;);
-INSERT INTO FORMADO_EM VALUES (1, &apos;80589385421&apos;);
-INSERT INTO FORMADO_EM VALUES (2, &apos;81084725304&apos;);
-INSERT INTO FORMADO_EM VALUES (10, &apos;81084725304&apos;);
-INSERT INTO FORMADO_EM VALUES (11, &apos;81084725304&apos;);
-INSERT INTO FORMADO_EM VALUES (12, &apos;81084725304&apos;);
-INSERT INTO FORMADO_EM VALUES (13, &apos;81084725304&apos;);
-INSERT INTO FORMADO_EM VALUES (2, &apos;85037528581&apos;);
-INSERT INTO FORMADO_EM VALUES (8, &apos;85037528581&apos;);
-INSERT INTO FORMADO_EM VALUES (2, &apos;99876173243&apos;);
-INSERT INTO FORMADO_EM VALUES (5, &apos;99876173243&apos;);
-INSERT INTO FORMADO_EM VALUES (4, &apos;99876173243&apos;);
+INSERT INTO FORMADO_EM VALUES (7, '45389849597');
+INSERT INTO FORMADO_EM VALUES (6, '45389849597');
+INSERT INTO FORMADO_EM VALUES (2, '45389849597');
+INSERT INTO FORMADO_EM VALUES (2, '12567794423');
+INSERT INTO FORMADO_EM VALUES (3, '12567794423');
+INSERT INTO FORMADO_EM VALUES (2, '39488553863');
+INSERT INTO FORMADO_EM VALUES (5, '39488553863');
+INSERT INTO FORMADO_EM VALUES (4, '39488553863');
+INSERT INTO FORMADO_EM VALUES (2, '80589385421');
+INSERT INTO FORMADO_EM VALUES (1, '80589385421');
+INSERT INTO FORMADO_EM VALUES (2, '81084725304');
+INSERT INTO FORMADO_EM VALUES (10, '81084725304');
+INSERT INTO FORMADO_EM VALUES (11, '81084725304');
+INSERT INTO FORMADO_EM VALUES (12, '81084725304');
+INSERT INTO FORMADO_EM VALUES (13, '81084725304');
+INSERT INTO FORMADO_EM VALUES (2, '85037528581');
+INSERT INTO FORMADO_EM VALUES (8, '85037528581');
+INSERT INTO FORMADO_EM VALUES (2, '99876173243');
+INSERT INTO FORMADO_EM VALUES (5, '99876173243');
+INSERT INTO FORMADO_EM VALUES (4, '99876173243');
 
 </code></pre>
 <h3 id="conte%C3%BAdo-das-tabelas">Conteúdo das Tabelas:</h3>

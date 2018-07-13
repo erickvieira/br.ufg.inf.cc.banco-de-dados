@@ -1,6 +1,6 @@
 ## Consultas
 Assistente Pessoal do Médico:
-- Mostrar salas com mais de 3 pacientes
+- Mostrar salas com mais de 1 paciente
 - Listar nome e sintoma dos Pacientes do médico "Elnora Underwood"
 - Mostrar número da sala e nome do enfermeiro responsavel onde há pacientes da médica "Hannah Fields" no turno Vespertino
 - Listar nomes e sintomas dos Pacientes do médico "Minnie Tyler" na sala 5
