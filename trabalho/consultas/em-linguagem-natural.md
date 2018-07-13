@@ -1,8 +1,8 @@
 ## Consultas
 Assistente Pessoal do Médico:
-- Mostrar salas com mais de 3 pacientes do Médico "Bessie Ramsey"
-- Listar nome e sintoma dos Pacientes do médico "Elnora Underwood" que tem retorno marcado para os próximos três primeiros dias de MAIO
-- Mostrar número da sala e nome do enfermeiro responsavel onde há pacientes do médico "Linnie Hunter" no turno Vespertino
+- Mostrar salas com mais de 3 pacientes
+- Listar nome e sintoma dos Pacientes do médico "Elnora Underwood"
+- Mostrar número da sala e nome do enfermeiro responsavel onde há pacientes da médica "Hannah Fields" no turno Vespertino
 - Listar nomes e sintomas dos Pacientes do médico "Minnie Tyler" na sala 5
 
 Medico:
